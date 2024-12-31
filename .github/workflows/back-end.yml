@@ -97,6 +97,11 @@ jobs:
                     --health-retries 30
         steps:
         -
+            name: "Install Subversion"
+            run: |
+                sudo apt-get install -qq subversion
+                svn --version
+        -
             name: "Set up PHP"
             uses: "shivammathur/setup-php@v2"
             with:
