@@ -18,10 +18,15 @@
 	</groups>
 	<filter>
 		<whitelist processUncoveredFilesFromWhitelist="true">
-			<directory suffix=".php">./</directory>
-			<exclude>
-				<directory suffix=".php">./includes/adminKit</directory>
-			</exclude>
+			<file>breadcrumb-navxt.php</file>
+			<file>class.bcn_admin.php</file>
+			<file>class.bcn_breadcrumb.php</file>
+			<file>class.bcn_breadcrumb_trail.php</file>
+			<file>class.bcn_network_admin.php</file>
+			<file>class.bcn_rest_controller.php</file>
+			<file>class.bcn_widget.php</file>
+			<file>options_upgrade.php</file>
+			<file>uninstall.php</file>
 		</whitelist>
 	</filter>
 </phpunit>
