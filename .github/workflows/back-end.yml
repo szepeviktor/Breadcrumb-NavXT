@@ -106,7 +106,6 @@ jobs:
             run: |
                 sudo apt-get install -qq subversion
                 svn --version
-                sudo netstat -antp
         -
             name: "Set up PHP"
             uses: "shivammathur/setup-php@v2"
@@ -126,7 +125,11 @@ jobs:
                 dependency-versions: "${{ matrix.dependencies }}"
         -
             name: "Install WordPress"
-            run: "bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender 127.0.0.1:${{ job.services.database.ports['3306'] }} ${{ matrix.wordpress-version }}"
+            env:
+                DB_HOST: "127.0.0.1:${{ job.services.database.ports['3306'] }}"
+                SKIP_DB_CREATE: "false"
+            run: |
+                bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender "${DB_HOST}" "${{ matrix.wordpress-version }}" "${SKIP_DB_CREATE}"
         -
             name: "Execute unit tests"
             if: ${{ ! matrix.phpunit-test-group }}
