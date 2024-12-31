@@ -57,7 +57,6 @@ jobs:
                 php-version:
                 - "7.3"
                 - "7.4"
-                - "8.0"
                 wordpress-version:
                 - "5.8"
                 - "6.0"
@@ -76,6 +75,10 @@ jobs:
                     wordpress-version: "latest"
                     wordpress-multisite: "1"
                     phpunit-test-group: "uninstall"
+                -
+                    php-version: "8.0"
+                    wordpress-version: "latest"
+                    wordpress-multisite: "0"
                 -
                     php-version: "8.0"
                     wordpress-version: "latest"
@@ -101,6 +104,7 @@ jobs:
             run: |
                 sudo apt-get install -qq subversion
                 svn --version
+                sudo netstat -antp
         -
             name: "Set up PHP"
             uses: "shivammathur/setup-php@v2"
@@ -123,7 +127,16 @@ jobs:
             run: "bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender localhost ${{ matrix.wordpress-version }}"
         -
             name: "Execute unit tests"
+            if: ${{ ! matrix.phpunit-test-group }}
+            env:
+                WP_MULTISITE: "${{ matrix.wordpress-multisite }}"
             run: "composer exec -- phpunit"
+        -
+            name: "Execute unit tests with test groups"
+            if: ${{ matrix.phpunit-test-group }}
+            env:
+                WP_MULTISITE: "${{ matrix.wordpress-multisite }}"
+            run: "composer exec -- phpunit --group=${{ matrix.phpunit-test-group }}"
         -
             name: "Send coverage to Coveralls"
             env:
