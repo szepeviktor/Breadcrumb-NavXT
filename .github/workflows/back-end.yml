@@ -88,6 +88,8 @@ jobs:
         services:
             database:
                 image: "mariadb:latest"
+                ports:
+                - "3306/tcp"
                 env:
                     MYSQL_DATABASE: "plugindb"
                     MYSQL_USER: "pluginuser"
