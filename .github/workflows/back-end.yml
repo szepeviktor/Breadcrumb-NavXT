@@ -127,7 +127,7 @@ jobs:
             name: "Install WordPress"
             env:
                 DB_HOST: "127.0.0.1:${{ job.services.database.ports['3306'] }}"
-                SKIP_DB_CREATE: "false"
+                SKIP_DB_CREATE: "true"
             run: |
                 bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender "${DB_HOST}" "${{ matrix.wordpress-version }}" "${SKIP_DB_CREATE}"
         -
