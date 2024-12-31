@@ -70,6 +70,7 @@ jobs:
                     wordpress-version: "latest"
                     wordpress-multisite: "0"
                     phpunit-test-group: "uninstall"
+                    coverage: true
                 -
                     php-version: "7.4"
                     wordpress-version: "latest"
@@ -138,15 +139,21 @@ jobs:
             run: "composer exec -- phpunit"
         -
             name: "Execute unit tests with test groups"
-            if: ${{ matrix.phpunit-test-group }}
+            if: ${{ matrix.phpunit-test-group && ! matrix.coverage }}
             env:
                 WP_MULTISITE: "${{ matrix.wordpress-multisite }}"
             run: "composer exec -- phpunit --group=${{ matrix.phpunit-test-group }}"
         -
+            name: "Execute unit tests generating code coverage"
+            if: ${{ matrix.phpunit-test-group && matrix.coverage }}
+            env:
+                WP_MULTISITE: "${{ matrix.wordpress-multisite }}"
+            run: "composer exec -- phpunit --coverage-clover clover.xml"
+        -
             name: "Send coverage to Coveralls"
             env:
                 COVERALLS_REPO_TOKEN: "${{ github.token }}"
-            if: "${{ env.COVERALLS_REPO_TOKEN && matrix.php-version == '7.4' }}"
+            if: "${{ env.COVERALLS_REPO_TOKEN && matrix.coverage }}"
             uses: "coverallsapp/github-action@v2"
             with:
                 github-token: "${{ env.COVERALLS_REPO_TOKEN }}"
