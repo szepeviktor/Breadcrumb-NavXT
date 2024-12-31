@@ -65,7 +65,7 @@ jobs:
                 wordpress-multisite:
                 - "0"
                 - "1"
-            include:
+                include:
                 -
                     php-version: "7.4"
                     wordpress-version: "latest"
