@@ -123,8 +123,8 @@ jobs:
             with:
                 dependency-versions: "${{ matrix.dependencies }}"
         -
-            name: "Install WordPress"
-            run: "bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender localhost ${{ matrix.wordpress-version }}"
+            name: "Install WordPress"            
+            run: "bash bin/install-wp-tests.sh plugindb pluginuser plaintextoffender 127.0.0.1:{{ job.services.database.ports['3306'] }} ${{ matrix.wordpress-version }}"
         -
             name: "Execute unit tests"
             if: ${{ ! matrix.phpunit-test-group }}
